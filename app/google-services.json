@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "20141152717",
+    "project_id": "lakin-99650",
+    "storage_bucket": "lakin-99650.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20141152717:android:452e6a036a67bbe6cf4c84",
+        "android_client_info": {
+          "package_name": "com.example.lakin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0tcVKmll7yZWtE2SDEQekcMfCRvfdLEk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
