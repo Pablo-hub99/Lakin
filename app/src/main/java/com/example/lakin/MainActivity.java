@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
         // Vinculación de elementos de la interfaz con las variables correspondientes
         ImageView btnUsuario = findViewById(R.id.btnUsuario); // Botón para acceder a la sección de usuarios
         ImageView btnPlagas = findViewById(R.id.btnplagas); // Botón para acceder a la sección de plagas
+        ImageView btnplanilla = findViewById(R.id.btnplanilla); // Botón para acceder a la sección de Planilla
         Button btnCerrar = findViewById(R.id.btnCerrarSesion); // Botón para cerrar sesión
 
         // Configuración de listeners para los botones
@@ -31,6 +32,12 @@ public class MainActivity extends AppCompatActivity {
             // Acciones a realizar cuando se hace clic en el botón de plagas
             Intent intent = new Intent(MainActivity.this, plagas.class);
             startActivity(intent); // Inicia la actividad de plagas
+        });
+
+        btnplanilla.setOnClickListener(v -> {
+            // Acciones a realizar cuando se hace clic en el botón de planilla
+            Intent intent = new Intent(MainActivity.this, Planilla.class);
+            startActivity(intent); // Inicia la actividad de Planilla
         });
 
         btnCerrar.setOnClickListener(v -> {
