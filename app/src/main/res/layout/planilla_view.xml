@@ -1,145 +1,163 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#C8D6AE">
 
+    <!-- ConstraintLayout para los EditText y el TextView -->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayoutHeader"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="#C8D6AE"
         android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <EditText
-            android:id="@+id/editTextFinca"
-            android:layout_width="165dp"
-            android:layout_height="33dp"
-            android:layout_marginTop="20dp"
-            android:background="#FFFFFF"
-            android:hint="Finca"
-            android:textColor="#000000"
-            android:textColorHint="#000000"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextUser" />
-
-        <EditText
-            android:id="@+id/editTextUser"
-            android:layout_width="165dp"
-            android:layout_height="33dp"
-            android:layout_marginTop="28dp"
-            android:background="#FFFFFF"
-            android:hint="Usuario"
-            android:textColor="#000000"
-            android:textColorHint="#000000"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnAtrasPlanilla" />
-
-
-        <EditText
-            android:id="@+id/editTextLote"
-            android:layout_width="165dp"
-            android:layout_height="33dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="20dp"
-            android:background="#FFFFFF"
-            android:textColor="#000000"
-            android:hint="Lote"
-            android:textColorHint="#000000"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/editTextUser"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="20dp"
             android:text="PLANILLA"
             android:textAllCaps="false"
             android:textColor="#000000"
             android:textSize="34sp"
-
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/editTextUser"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintBottom_toTopOf="@id/editTextUser"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/PlanillaList"
-            android:layout_width="360dp"
-            android:layout_height="427dp"
+        <EditText
+            android:id="@+id/editTextUser"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:background="#C8D6AE"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.274"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextFinca" />
-
-        <Button
-            android:id="@+id/btnGuardarBd"
-            android:layout_width="175dp"
-            android:layout_height="56dp"
-
-            android:backgroundTint="#AEE56F"
-            android:text="Subir Datos"
+            android:background="#FFFFFF"
+            android:hint="Usuario"
             android:textColor="#000000"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.902"
+            android:textColorHint="#000000"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/PlanillaList"
-            app:layout_constraintVertical_bias="0.838" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView"/>
+
+        <EditText
+            android:id="@+id/editTextFinca"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="#FFFFFF"
+            android:hint="Finca"
+            android:textColor="#000000"
+            android:textColorHint="#000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editTextUser"/>
+
+        <EditText
+            android:id="@+id/editTextLote"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="#FFFFFF"
+            android:hint="Lote"
+            android:textColor="#000000"
+            android:textColorHint="#000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editTextFinca"/>
+
+        <EditText
+            android:id="@+id/editTextFecha"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="#FFFFFF"
+            android:textColor="#000000"
+            android:textColorHint="#000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editTextLote"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- RecyclerView para mostrar la lista de informes -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/InformesList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#C8D6AE"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayoutHeader"
+        app:layout_constraintBottom_toTopOf="@id/PlanillaList"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- RecyclerView para mostrar la lista de plagas -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/PlanillaList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#C8D6AE"
+        app:layout_constraintTop_toBottomOf="@id/InformesList"
+        app:layout_constraintBottom_toTopOf="@id/constraintLayoutButtons"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- ConstraintLayout para los botones -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayoutButtons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="#C8D6AE"
+        app:layout_constraintTop_toBottomOf="@id/PlanillaList"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
             android:id="@+id/btnGuardarlocal"
-            android:layout_width="175dp"
+            android:layout_width="0dp"
             android:layout_height="56dp"
-
+            android:layout_marginEnd="8dp"
             android:backgroundTint="#AEE56F"
             android:text="Guardar local"
             android:textColor="#000000"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.004"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/PlanillaList"
-            app:layout_constraintVertical_bias="0.838" />
+            app:layout_constraintEnd_toStartOf="@id/btnGuardarBd"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <ImageView
-            android:id="@+id/btnAtrasPlanilla"
-            android:layout_width="63dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:background="#146025"
-            android:padding="5dp"
-            android:src="@drawable/back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/editTextFecha"
-            android:layout_width="165dp"
-            android:layout_height="33dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="20dp"
-            android:background="#FFFFFF"
+        <Button
+            android:id="@+id/btnGuardarBd"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#AEE56F"
+            android:text="Subir Datos"
             android:textColor="#000000"
-            android:textColorHint="#000000"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@id/btnGuardarlocal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.09"
-            app:layout_constraintStart_toEndOf="@+id/editTextFinca"
-            app:layout_constraintTop_toBottomOf="@+id/editTextLote" />
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Botón de retroceso -->
+    <ImageView
+        android:id="@+id/btnAtrasPlanilla"
+        android:layout_width="63dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="#146025"
+        android:padding="5dp"
+        android:src="@drawable/back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,7 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.lakin.adapter.InformesAdapter;
 import com.example.lakin.adapter.PlanillaAdapter;
+import com.example.lakin.modelo.InformeModel;
 import com.example.lakin.modelo.PlagasModel;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -21,16 +23,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 public class Planilla extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private PlanillaAdapter planillaAdapter;
+    private InformesAdapter informesAdapter;
     private RecyclerView recyclerView;
+    private RecyclerView informesRecyclerView;
     private ImageView btnAtrasPlanilla;
     private EditText txtUserName;
     private EditText editTextLote;
@@ -78,7 +84,18 @@ public class Planilla extends AppCompatActivity {
         // Inicializar Firestore
         db = FirebaseFirestore.getInstance();
 
-        // Configurar el RecyclerView
+        // Configurar el RecyclerView para los informes
+        informesRecyclerView = findViewById(R.id.InformesList);
+        informesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Obtener los informes del JSON y configurar el adaptador InformesAdapter
+        informesAdapter = new InformesAdapter(obtenerInformesDesdeJson(), this, informe -> {
+            // Aquí puedes definir el comportamiento cuando se hace clic en un informe
+            Toast.makeText(Planilla.this, "Clic en el informe: " + informe.getId(), Toast.LENGTH_SHORT).show();
+        });
+        informesRecyclerView.setAdapter(informesAdapter);
+
+        // Configurar el RecyclerView para las plagas
         recyclerView = findViewById(R.id.PlanillaList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -99,6 +116,8 @@ public class Planilla extends AppCompatActivity {
         super.onStart();
         // Iniciar la escucha del adaptador
         planillaAdapter.startListening();
+
+
     }
 
     @Override
@@ -106,10 +125,31 @@ public class Planilla extends AppCompatActivity {
         super.onStop();
         // Detener la escucha del adaptador
         planillaAdapter.stopListening();
+
     }
 
-    // Método para guardar la información localmente en formato JSON
-// Método para guardar la información localmente en formato JSON
+    // Método para obtener los informes desde el JSON almacenado localmente
+    private List<InformeModel> obtenerInformesDesdeJson() {
+        List<InformeModel> informesList = new ArrayList<>();
+        String jsonExistente = obtenerJsonExistente();
+
+        try {
+            JSONObject jsonObject = new JSONObject(jsonExistente);
+            if (jsonObject.has("registros")) {
+                JSONArray jsonArrayRegistros = jsonObject.getJSONArray("registros");
+                for (int i = 0; i < jsonArrayRegistros.length(); i++) {
+                    JSONObject informeObject = jsonArrayRegistros.getJSONObject(i);
+                    String id = informeObject.optString("id");
+                    String usuario = informeObject.optString("usuario");
+                    String fechaHora = informeObject.optString("fechaHora");
+                    informesList.add(new InformeModel(id, usuario, fechaHora));
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return informesList;
+    }
     // Método para guardar la información localmente en formato JSON
     private void guardarEnLocal() {
         String userName = txtUserName.getText().toString();
@@ -127,6 +167,9 @@ public class Planilla extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
         String fechaHora = dateFormat.format(calendar.getTime());
 
+        // Generar un ID único para este informe
+        String idInforme = UUID.randomUUID().toString();
+
         // Obtener el JSON existente
         String jsonExistente = obtenerJsonExistente();
 
@@ -143,6 +186,7 @@ public class Planilla extends AppCompatActivity {
 
             // Crear un nuevo objeto JSON para los datos actuales
             JSONObject nuevoRegistro = new JSONObject();
+            nuevoRegistro.put("id", idInforme); // Agregar el ID único
             nuevoRegistro.put("usuario", userName);
             nuevoRegistro.put("lote", lote);
             nuevoRegistro.put("finca", finca);
