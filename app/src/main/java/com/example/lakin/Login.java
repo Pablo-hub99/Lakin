@@ -56,14 +56,18 @@ public class Login extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     // Verifica si la autenticación fue exitosa
                     if (task.isSuccessful()){
+                        // Obtiene el nombre de usuario actual
+                        String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                         // Finaliza esta actividad y abre la MainActivity
+                        Intent intent = new Intent(Login.this, MainActivity.class);
+                        intent.putExtra("userName", userName);
+                        startActivity(intent);
                         finish();
-                        startActivity(new Intent(Login.this, MainActivity.class));
                         // Muestra un mensaje de bienvenida
                         Toast.makeText(Login.this, "Bienvenido", Toast.LENGTH_SHORT).show();
                     } else {
                         // Muestra un mensaje de error si la autenticación falla
-                        Toast.makeText(Login.this, "Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show();
                     }
                 })
                 // Agrega un listener para manejar el fallo en la autenticación

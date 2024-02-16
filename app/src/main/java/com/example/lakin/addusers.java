@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -138,10 +139,10 @@ public class addusers extends AppCompatActivity {
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(correoUser, passUser)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            // Obtiene el ID del usuario creado
-                            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                            if (firebaseUser != null) {
-                                String userId = firebaseUser.getUid();
+                            // Registro exitoso, ahora establece el nombre de usuario
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            if (user != null) {
+                                String userId = user.getUid();
 
                                 // Guarda los detalles del nuevo usuario en Firestore
                                 Map<String, Object> userData = new HashMap<>();
@@ -156,10 +157,24 @@ public class addusers extends AppCompatActivity {
                                         .document(userId)
                                         .set(userData)
                                         .addOnSuccessListener(aVoid -> {
-                                            Toast.makeText(getApplicationContext(), "Usuario creado exitosamente", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(addusers.this, usuarios.class);
-                                            startActivity(intent);
-                                            finish();
+                                            // Establece el nombre de usuario
+                                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                                    .setDisplayName(nameUser)
+                                                    .build();
+
+                                            user.updateProfile(profileUpdates)
+                                                    .addOnCompleteListener(task1 -> {
+                                                        if (task1.isSuccessful()) {
+                                                            // Nombre de usuario actualizado correctamente
+                                                            Toast.makeText(getApplicationContext(), "Usuario creado exitosamente", Toast.LENGTH_SHORT).show();
+                                                            Intent intent = new Intent(addusers.this, usuarios.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        } else {
+                                                            // No se pudo actualizar el nombre de usuario
+                                                            Toast.makeText(getApplicationContext(), "Error al establecer el nombre de usuario", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
                                         })
                                         .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "Error al ingresar usuario", Toast.LENGTH_SHORT).show());
                             }

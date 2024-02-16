@@ -15,6 +15,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Establece la vista desde activity_main.xml
 
+        // Recibir el nombre de usuario del Intent
+        String userName = getIntent().getStringExtra("userName");
+
         // Vinculación de elementos de la interfaz con las variables correspondientes
         ImageView btnUsuario = findViewById(R.id.btnUsuario); // Botón para acceder a la sección de usuarios
         ImageView btnPlagas = findViewById(R.id.btnplagas); // Botón para acceder a la sección de plagas
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         btnplanilla.setOnClickListener(v -> {
             // Acciones a realizar cuando se hace clic en el botón de planilla
             Intent intent = new Intent(MainActivity.this, Planilla.class);
+            intent.putExtra("userName", userName);
             startActivity(intent); // Inicia la actividad de Planilla
         });
 

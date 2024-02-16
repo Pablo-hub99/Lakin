@@ -3,6 +3,7 @@ package com.example.lakin.modelo;
 public class PlagasModel {
     // Propiedades de una plaga
     String Descripcion, Fecha_Fin, Fecha_Inicio, nombre;
+    boolean isSelected;
 
     // Constructor vacío requerido para Firebase
     public PlagasModel() {}
@@ -13,6 +14,7 @@ public class PlagasModel {
         this.Fecha_Fin = Fecha_Fin;
         this.Fecha_Inicio = Fecha_Inicio;
         this.nombre = nombre;
+        this.isSelected = false;
     }
 
     // Getter y Setter para la propiedad Descripcion
@@ -50,4 +52,12 @@ public class PlagasModel {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
 }

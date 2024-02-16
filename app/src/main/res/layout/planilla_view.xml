@@ -17,22 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/editTextPlagueName"
-            android:layout_width="165dp"
-            android:layout_height="33dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="20dp"
-            android:background="#FFFFFF"
-            android:hint="Fecha"
-            android:textColor="#000000"
-            android:textColorHint="#000000"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/editTextPlagueName4"
-            app:layout_constraintTop_toBottomOf="@+id/editTextPlagueName2" />
-
-        <EditText
-            android:id="@+id/editTextPlagueName4"
+            android:id="@+id/editTextFinca"
             android:layout_width="165dp"
             android:layout_height="33dp"
             android:layout_marginTop="20dp"
@@ -41,10 +26,10 @@
             android:textColor="#000000"
             android:textColorHint="#000000"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextPlagueName3" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextUser" />
 
         <EditText
-            android:id="@+id/editTextPlagueName3"
+            android:id="@+id/editTextUser"
             android:layout_width="165dp"
             android:layout_height="33dp"
             android:layout_marginTop="28dp"
@@ -57,18 +42,18 @@
 
 
         <EditText
-            android:id="@+id/editTextPlagueName2"
+            android:id="@+id/editTextLote"
             android:layout_width="165dp"
             android:layout_height="33dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="20dp"
             android:background="#FFFFFF"
-            android:hint="Lote"
             android:textColor="#000000"
+            android:hint="Lote"
             android:textColorHint="#000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/editTextPlagueName3"
+            app:layout_constraintStart_toEndOf="@+id/editTextUser"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <TextView
@@ -83,7 +68,7 @@
             android:textSize="34sp"
 
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/editTextPlagueName3"
+            app:layout_constraintBottom_toTopOf="@+id/editTextUser"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
@@ -96,10 +81,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.274"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextPlagueName4" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextFinca" />
 
         <Button
-            android:id="@+id/btnGuardarLocal"
+            android:id="@+id/btnGuardarBd"
             android:layout_width="175dp"
             android:layout_height="56dp"
 
@@ -115,7 +100,7 @@
             app:layout_constraintVertical_bias="0.838" />
 
         <Button
-            android:id="@+id/btnGuardarBd"
+            android:id="@+id/btnGuardarlocal"
             android:layout_width="175dp"
             android:layout_height="56dp"
 
@@ -141,6 +126,20 @@
             android:src="@drawable/back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editTextFecha"
+            android:layout_width="165dp"
+            android:layout_height="33dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="20dp"
+            android:background="#FFFFFF"
+            android:textColor="#000000"
+            android:textColorHint="#000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.09"
+            app:layout_constraintStart_toEndOf="@+id/editTextFinca"
+            app:layout_constraintTop_toBottomOf="@+id/editTextLote" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
