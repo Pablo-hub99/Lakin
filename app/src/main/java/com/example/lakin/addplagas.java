@@ -1,15 +1,22 @@
 package com.example.lakin;
 
+
+import android.app.Activity;
+import com.google.firebase.storage.UploadTask;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +32,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +40,12 @@ import java.util.Map;
 public class addplagas extends AppCompatActivity {
 
     // Declaración de elementos de la interfaz y Firebase
+
+
+
+
+    private static final int SELECT_PHOTO = 1;
+    private ImageView imageView;
     ImageView photo_Plaga, btnAtras;
     Button btn_add_photo, btn_delete_photo, btnsave;
     StorageReference storageReference;
@@ -50,7 +64,44 @@ public class addplagas extends AppCompatActivity {
     EditText name, DateStart, DateEnd, Description; // Campos de entrada para datos de la plaga
     private FirebaseFirestore mFirestore;
 
-    String rolP = getIntent().getStringExtra("userRole");
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri selectedImage = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                imageView.setImageBitmap(bitmap);
+
+
+                String folderName = "Plagas";
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageRef = storage.getReference();
+
+                String imageName = "tu_id_de_imagen.jpg"; // Reemplaza esto con el ID de tu imagen
+                StorageReference imageRef = storageRef.child(folderName + "/" + imageName);
+
+                UploadTask uploadTask = imageRef.putFile(selectedImage);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Manejar cualquier error
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // La imagen se ha cargado exitosamente
+                    }
+                });
+                // Aquí termina el código para subir la imagen a Firebase
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +112,6 @@ public class addplagas extends AppCompatActivity {
         btnAtras = findViewById(R.id.btnAtras);
         btnAtras.setOnClickListener(v -> {
             Intent intent = new Intent(addplagas.this, plagas.class);
-            intent.putExtra("userRole", rolP);
             startActivity(intent);
             finish();
         });
@@ -75,11 +125,24 @@ public class addplagas extends AppCompatActivity {
         name = findViewById(R.id.editTextPlagueName);
         DateStart = findViewById(R.id.editTextStartDate);
         DateEnd = findViewById(R.id.editTextEndDate);
-        photo_Plaga = findViewById(R.id.plaga_photo);
         Description = findViewById(R.id.editTextDescription);
-        btn_add_photo = findViewById(R.id.btn_photo);
         btn_delete_photo = findViewById(R.id.btn_remove_photo);
         btnsave = findViewById(R.id.btnSave);
+        Button btnPhoto = findViewById(R.id.btn_photo);
+        imageView = findViewById(R.id.plaga_photo);
+
+        btnPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+            }
+        });
+
+
+
+
 
         // Comprueba si se está creando una nueva plaga o actualizando una existente
         if (id == null || id.equals("")) { // Nueva plaga
@@ -136,7 +199,6 @@ public class addplagas extends AppCompatActivity {
                 .addOnSuccessListener(unused -> {
                     Toast.makeText(getApplicationContext(), "Plaga editada exitosamente", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(addplagas.this, plagas.class);
-                    intent.putExtra("userRole", rolP);
                     startActivity(intent);
                     finish();
                 })
@@ -156,7 +218,6 @@ public class addplagas extends AppCompatActivity {
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(getApplicationContext(), "Plaga creada exitosamente", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(addplagas.this, plagas.class);
-                    intent.putExtra("userRole", rolP);
                     startActivity(intent);
                     finish();
                 })
@@ -203,7 +264,51 @@ public class addplagas extends AppCompatActivity {
         onBackPressed();
         return false;
     }
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
        /* btn_add_photo.setOnClickListener(view -> uploadPhotoView());
 

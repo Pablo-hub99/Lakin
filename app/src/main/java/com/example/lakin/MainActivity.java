@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView btnUsuario = findViewById(R.id.btnUsuario); // Botón para acceder a la sección de usuarios
         ImageView btnPlagas = findViewById(R.id.btnplagas); // Botón para acceder a la sección de plagas
         ImageView btnplanilla = findViewById(R.id.btnplanilla); // Botón para acceder a la sección de Planilla
+        ImageView btngrafica = findViewById(R.id.btngraficas);
         Button btnCerrar = findViewById(R.id.btnCerrarSesion); // Botón para cerrar sesión
 
         String rol = getIntent().getStringExtra("userRole");
@@ -61,6 +62,12 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("userRole", rol);
             intent.putExtra("userName", userName);
             startActivity(intent); // Inicia la actividad de Planilla
+        });
+
+        btngrafica.setOnClickListener(v -> {
+            // Acciones a realizar cuando se hace clic en el botón de planilla
+            Intent intent = new Intent(MainActivity.this, grafica.class);
+            startActivity(intent); // Inicia la actividad de
         });
 
         btnCerrar.setOnClickListener(v -> {

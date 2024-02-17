@@ -51,6 +51,10 @@
             android:name=".Planilla"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".grafica"
+            android:exported="true">
+        </activity>
 
         <meta-data
             android:name="preloaded_fonts"
