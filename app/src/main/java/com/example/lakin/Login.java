@@ -13,6 +13,12 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class Login extends AppCompatActivity {
@@ -22,10 +28,54 @@ public class Login extends AppCompatActivity {
     EditText email, password; // Campos de entrada para correo y contraseña
     FirebaseAuth mAuth; // Instancia de Firebase Authentication
 
+    FirebaseFirestore mFirestore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_view); // Establece la vista para esta actividad desde login_view.xml
+        setContentView(R.layout.login_view);
+
+        // Inicializar FirebaseFirestore
+        mFirestore = FirebaseFirestore.getInstance();
+
+        // Obtener la fecha actual
+        Date currentDate = new Date();
+
+        // Obtener las plagas que están activas en la fecha actual
+        mFirestore.collection("Plagas")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    // Iterar sobre los documentos de las plagas encontradas
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        // Obtener la fecha de inicio y fin de la plaga
+                        String startDateStr = documentSnapshot.getString("Fecha_Inicio");
+                        String endDateStr = documentSnapshot.getString("Fecha_Fin");
+
+                        // Parsear las fechas al formato adecuado
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+                        try {
+                            Date startDate = dateFormat.parse(startDateStr);
+                            Date endDate = dateFormat.parse(endDateStr);
+
+                            // Verificar si la fecha actual está dentro del rango de la plaga
+                            if (startDate != null && endDate != null &&
+                                    currentDate.compareTo(startDate) >= 0 && currentDate.compareTo(endDate) <= 0) {
+                                // Obtener la descripción de la plaga
+                                String descripcionPlaga = documentSnapshot.getString("Descripcion");
+
+                                // Mostrar la descripción de la plaga al usuario
+                                Toast.makeText(Login.this, "Descripción de la plaga: " + descripcionPlaga, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            // Manejar errores de análisis de fecha
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Manejar errores
+                    Toast.makeText(Login.this, "Error al obtener las plagas", Toast.LENGTH_SHORT).show();
+                });
 
         mAuth = FirebaseAuth.getInstance(); // Inicializa la instancia de Firebase Authentication
 
