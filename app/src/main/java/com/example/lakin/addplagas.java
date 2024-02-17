@@ -50,6 +50,8 @@ public class addplagas extends AppCompatActivity {
     EditText name, DateStart, DateEnd, Description; // Campos de entrada para datos de la plaga
     private FirebaseFirestore mFirestore;
 
+    String rolP = getIntent().getStringExtra("userRole");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,7 @@ public class addplagas extends AppCompatActivity {
         btnAtras = findViewById(R.id.btnAtras);
         btnAtras.setOnClickListener(v -> {
             Intent intent = new Intent(addplagas.this, plagas.class);
+            intent.putExtra("userRole", rolP);
             startActivity(intent);
             finish();
         });
@@ -133,6 +136,7 @@ public class addplagas extends AppCompatActivity {
                 .addOnSuccessListener(unused -> {
                     Toast.makeText(getApplicationContext(), "Plaga editada exitosamente", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(addplagas.this, plagas.class);
+                    intent.putExtra("userRole", rolP);
                     startActivity(intent);
                     finish();
                 })
@@ -152,6 +156,7 @@ public class addplagas extends AppCompatActivity {
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(getApplicationContext(), "Plaga creada exitosamente", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(addplagas.this, plagas.class);
+                    intent.putExtra("userRole", rolP);
                     startActivity(intent);
                     finish();
                 })

@@ -28,11 +28,14 @@ public class plagas extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plagas_view); // Establece la vista desde plagas_view.xml
 
+        String rol = getIntent().getStringExtra("userRole");
+
         // Configuración del botón para volver atrás
         btnAtras = findViewById(R.id.btnAtrasPlagas);
         btnAtras.setOnClickListener(v -> {
             // Acciones a realizar cuando se hace clic en el botón de volver atrás
             Intent intent = new Intent(plagas.this, MainActivity.class);
+            intent.putExtra("userRole", rol);
             startActivity(intent); // Inicia la actividad principal (MainActivity)
             finish(); // Finaliza la actividad actual
         });
@@ -57,6 +60,7 @@ public class plagas extends AppCompatActivity {
         btnAñadirPlaga.setOnClickListener(v -> {
             // Acciones a realizar cuando se hace clic en el botón de agregar plaga
             Intent intent = new Intent(plagas.this, addplagas.class);
+            intent.putExtra("userRole", rol);
             startActivity(intent); // Inicia la actividad para agregar plaga (addplagas)
         });
     }

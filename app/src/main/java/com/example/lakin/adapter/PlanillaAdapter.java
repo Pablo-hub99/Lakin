@@ -20,6 +20,7 @@ import java.util.List;
 public class PlanillaAdapter extends FirestoreRecyclerAdapter<PlagasModel, PlanillaAdapter.ViewHolder> {
     private Activity activity;
     private List<PlagasModel> plagasSeleccionadas;
+    private PlagasAdapter plagasAdapter;
 
     public PlanillaAdapter(@NonNull FirestoreRecyclerOptions<PlagasModel> options, Activity activity) {
         super(options);
@@ -52,6 +53,14 @@ public class PlanillaAdapter extends FirestoreRecyclerAdapter<PlagasModel, Plani
 
     public List<PlagasModel> getPlagasSeleccionadas() {
         return plagasSeleccionadas;
+    }
+
+    public PlagasAdapter getPlagasAdapter() {
+        return plagasAdapter;
+    }
+
+    public void setPlagasAdapter(PlagasAdapter plagasAdapter) {
+        this.plagasAdapter = plagasAdapter;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

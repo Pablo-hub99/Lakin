@@ -42,6 +42,8 @@ public class Planilla extends AppCompatActivity {
     private EditText editTextLote;
     private EditText editTextFinca;
 
+    private EditText editTextFecha;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +52,11 @@ public class Planilla extends AppCompatActivity {
         txtUserName = findViewById(R.id.editTextUser);
         editTextLote = findViewById(R.id.editTextLote);
         editTextFinca = findViewById(R.id.editTextFinca);
+        editTextFecha = findViewById(R.id.editTextFecha);
 
         // Obtener el nombre de usuario del Intent
         String userName = getIntent().getStringExtra("userName");
+        String rol = getIntent().getStringExtra("userRole");
 
         // Mostrar el nombre de usuario en el EditText
         if (userName != null) {
@@ -65,7 +69,6 @@ public class Planilla extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String currentDate = dateFormat.format(calendar.getTime());
-        EditText editTextFecha = findViewById(R.id.editTextFecha);
         editTextFecha.setText(currentDate);
         editTextFecha.setFocusable(false);
         editTextFecha.setClickable(false);
@@ -77,6 +80,7 @@ public class Planilla extends AppCompatActivity {
         btnAtrasPlanilla = findViewById(R.id.btnAtrasPlanilla);
         btnAtrasPlanilla.setOnClickListener(v -> {
             Intent intent = new Intent(Planilla.this, MainActivity.class);
+            intent.putExtra("userRole", rol);
             startActivity(intent);
             finish();
         });
@@ -89,10 +93,8 @@ public class Planilla extends AppCompatActivity {
         informesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Obtener los informes del JSON y configurar el adaptador InformesAdapter
-        informesAdapter = new InformesAdapter(obtenerInformesDesdeJson(), this, informe -> {
-            // Aquí puedes definir el comportamiento cuando se hace clic en un informe
-            Toast.makeText(Planilla.this, "Clic en el informe: " + informe.getId(), Toast.LENGTH_SHORT).show();
-        });
+        // Aquí puedes definir el comportamiento cuando se hace clic en un informe
+        informesAdapter = new InformesAdapter(obtenerInformesDesdeJson(), this, this::mostrarDetallesInforme);
         informesRecyclerView.setAdapter(informesAdapter);
 
         // Configurar el RecyclerView para las plagas
@@ -127,6 +129,52 @@ public class Planilla extends AppCompatActivity {
         planillaAdapter.stopListening();
 
     }
+    private void mostrarDetallesInforme(InformeModel informe) {
+        // Obtener el ID del informe seleccionado
+        String idInforme = informe.getId();
+
+        // Obtener los datos del informe seleccionado en el JSON
+        String jsonExistente = obtenerJsonExistente();
+        try {
+            JSONObject jsonObject = new JSONObject(jsonExistente);
+            if (jsonObject.has("registros")) {
+                JSONArray jsonArrayRegistros = jsonObject.getJSONArray("registros");
+                for (int i = 0; i < jsonArrayRegistros.length(); i++) {
+                    JSONObject informeObject = jsonArrayRegistros.getJSONObject(i);
+                    String id = informeObject.optString("id");
+                    if (id.equals(idInforme)) {
+                        // Se encontró el informe correspondiente
+                        String usuario = informeObject.optString("usuario");
+                        String fechaHora = informeObject.optString("fechaHora");
+                        String lote = informeObject.optString("lote");
+                        String finca = informeObject.optString("finca");
+                        // Actualizar los EditText con los datos del informe
+                        txtUserName.setText(usuario);
+                        editTextFecha.setText(fechaHora);
+                        editTextLote.setText(lote);
+                        editTextFinca.setText(finca);
+                        // Además, puedes cargar los datos de las plagas relacionadas con este informe si es necesario
+                        // Recuperar el array de plagas seleccionadas
+                        JSONArray jsonArrayPlagas = informeObject.optJSONArray("plagasSeleccionadas");
+                        if (jsonArrayPlagas != null) {
+                            List<String> plagas = new ArrayList<>();
+                            for (int j = 0; j < jsonArrayPlagas.length(); j++) {
+                                JSONObject plagaObject = jsonArrayPlagas.getJSONObject(j);
+                                String nombrePlaga = plagaObject.optString("nombre");
+                                plagas.add(nombrePlaga);
+                            }
+                            // Puedes mostrar las plagas en un TextView o cualquier otro componente de la interfaz de usuario
+                        }
+                        // Salir del bucle una vez que se encuentre el informe correspondiente
+                        break;
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // Método para obtener los informes desde el JSON almacenado localmente
     private List<InformeModel> obtenerInformesDesdeJson() {

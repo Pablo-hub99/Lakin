@@ -28,11 +28,14 @@ public class usuarios extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_view); // Establece la vista desde user_view.xml
 
+        String rol = getIntent().getStringExtra("userRole");
+
         // Configuración del botón para volver atrás
         btnAtras = findViewById(R.id.btnAtrasUser);
         btnAtras.setOnClickListener(v -> {
             // Acciones a realizar cuando se hace clic en el botón de volver atrás
             Intent intent = new Intent(usuarios.this, MainActivity.class);
+            intent.putExtra("userRole", rol);
             startActivity(intent); // Inicia la actividad principal (MainActivity)
             finish(); // Finaliza la actividad actual
         });
@@ -57,6 +60,7 @@ public class usuarios extends AppCompatActivity {
         btnAñadirUser.setOnClickListener(v -> {
             // Acciones a realizar cuando se hace clic en el botón de agregar usuario
             Intent intent = new Intent(usuarios.this, addusers.class);
+            intent.putExtra("userRole", rol);
             startActivity(intent); // Inicia la actividad para agregar usuario (addusers)
         });
     }

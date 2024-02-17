@@ -12,9 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -33,6 +31,8 @@ public class addusers extends AppCompatActivity {
     FirebaseAuth mAuth; // Instancia de Firebase Authentication
     private FirebaseFirestore mFirestore; // Instancia de Firebase Firestore
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +42,7 @@ public class addusers extends AppCompatActivity {
         btnAtras = findViewById(R.id.Atras);
         btnAtras.setOnClickListener(v -> {
             Intent intent = new Intent(addusers.this, usuarios.class);
+
             startActivity(intent);
             finish();
         });
@@ -117,6 +118,7 @@ public class addusers extends AppCompatActivity {
                 .addOnSuccessListener(unused -> {
                     Toast.makeText(getApplicationContext(), "Usuario editado exitosamente", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(addusers.this, usuarios.class);
+
                     startActivity(intent);
                     finish();
                 })
@@ -168,6 +170,7 @@ public class addusers extends AppCompatActivity {
                                                             // Nombre de usuario actualizado correctamente
                                                             Toast.makeText(getApplicationContext(), "Usuario creado exitosamente", Toast.LENGTH_SHORT).show();
                                                             Intent intent = new Intent(addusers.this, usuarios.class);
+
                                                             startActivity(intent);
                                                             finish();
                                                         } else {

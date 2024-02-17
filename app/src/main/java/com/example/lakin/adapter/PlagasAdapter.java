@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class PlagasAdapter extends FirestoreRecyclerAdapter<PlagasModel, PlagasAdapter.ViewHolder> {
     private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+
     Activity activity;
 
     // Constructor que recibe FirestoreRecyclerOptions y la Activity asociada
