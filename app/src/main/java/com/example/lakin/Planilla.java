@@ -15,9 +15,11 @@ import com.example.lakin.adapter.InformesAdapter;
 import com.example.lakin.adapter.PlanillaAdapter;
 import com.example.lakin.modelo.InformeModel;
 import com.example.lakin.modelo.PlagasModel;
+import com.example.lakin.modelo.PlanillaDataModel;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.checkerframework.common.returnsreceiver.qual.This;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +27,6 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -44,6 +45,10 @@ public class Planilla extends AppCompatActivity {
 
     private EditText editTextFecha;
 
+    private String name ;
+    private String lote ;
+    private String finca ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,9 +59,16 @@ public class Planilla extends AppCompatActivity {
         editTextFinca = findViewById(R.id.editTextFinca);
         editTextFecha = findViewById(R.id.editTextFecha);
 
+
         // Obtener el nombre de usuario del Intent
         String userName = getIntent().getStringExtra("userName");
         String rol = getIntent().getStringExtra("userRole");
+
+        if(userName == null){
+            userName = name;
+            editTextLote.setText(lote);
+            editTextFinca.setText(finca);
+        }
 
         // Mostrar el nombre de usuario en el EditText
         if (userName != null) {
@@ -75,6 +87,9 @@ public class Planilla extends AppCompatActivity {
 
         // Configurar el botón de guardar local
         findViewById(R.id.btnGuardarlocal).setOnClickListener(v -> guardarEnLocal());
+
+        //Configurar boton de subir datos
+        findViewById(R.id.btnGuardarBd).setOnClickListener(v -> subirDatosAFirestore());
 
         // Configuración del botón para volver atrás
         btnAtrasPlanilla = findViewById(R.id.btnAtrasPlanilla);
@@ -119,7 +134,6 @@ public class Planilla extends AppCompatActivity {
         // Iniciar la escucha del adaptador
         planillaAdapter.startListening();
 
-
     }
 
     @Override
@@ -163,7 +177,7 @@ public class Planilla extends AppCompatActivity {
                                 String nombrePlaga = plagaObject.optString("nombre");
                                 plagas.add(nombrePlaga);
                             }
-                            // Puedes mostrar las plagas en un TextView o cualquier otro componente de la interfaz de usuario
+
                         }
                         // Salir del bucle una vez que se encuentre el informe correspondiente
                         break;
@@ -200,15 +214,20 @@ public class Planilla extends AppCompatActivity {
     }
     // Método para guardar la información localmente en formato JSON
     private void guardarEnLocal() {
-        String userName = txtUserName.getText().toString();
-        String lote = editTextLote.getText().toString().trim();
-        String finca = editTextFinca.getText().toString().trim();
+         name = txtUserName.getText().toString();
+         lote = editTextLote.getText().toString().trim();
+         finca = editTextFinca.getText().toString().trim();
 
         // Verificar si los campos están completos
         if (lote.isEmpty() || finca.isEmpty()) {
             Toast.makeText(Planilla.this, "Debe completar el lote y la finca", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (planillaAdapter.getPlagasSeleccionadas().isEmpty()) {
+            Toast.makeText(Planilla.this, "Debe seleccionar al menos una plaga", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
 
         // Obtener la fecha actual
         Calendar calendar = Calendar.getInstance();
@@ -235,7 +254,7 @@ public class Planilla extends AppCompatActivity {
             // Crear un nuevo objeto JSON para los datos actuales
             JSONObject nuevoRegistro = new JSONObject();
             nuevoRegistro.put("id", idInforme); // Agregar el ID único
-            nuevoRegistro.put("usuario", userName);
+            nuevoRegistro.put("usuario", name);
             nuevoRegistro.put("lote", lote);
             nuevoRegistro.put("finca", finca);
             nuevoRegistro.put("fechaHora", fechaHora);
@@ -265,7 +284,14 @@ public class Planilla extends AppCompatActivity {
             guardarJsonEnSharedPreferences(jsonStr);
 
             // Notificar al usuario que la información se ha guardado localmente
-            Toast.makeText(Planilla.this, "JSON guardado localmente:\n" + jsonStr, Toast.LENGTH_LONG).show();
+            Toast.makeText(Planilla.this, "Información guardada correctamente.", Toast.LENGTH_LONG).show();
+            // Notificar al adaptador que los datos han cambiado
+            finish();
+            Intent intent = new Intent(Planilla.this, Planilla.class);
+            startActivity(intent);
+            txtUserName.setText(name);
+            editTextLote.setText(lote);
+            editTextFinca.setText(finca);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -304,4 +330,83 @@ public class Planilla extends AppCompatActivity {
         editor.putString("json_data", json);
         editor.apply();
     }
+
+    // Método para subir los datos del JSON a Firestore
+    private void subirDatosAFirestore() {
+        name = txtUserName.getText().toString();
+        lote = editTextLote.getText().toString().trim();
+        finca = editTextFinca.getText().toString().trim();
+        // Obtener el JSON almacenado localmente
+        String jsonExistente = obtenerJsonExistente();
+
+
+        try {
+            // Convertir el JSON a JSONObject
+            JSONObject jsonObject = new JSONObject(jsonExistente);
+
+            // Verificar si el JSON contiene la clave "registros"
+            if (jsonObject.has("registros")) {
+                // Obtener el array de registros
+                JSONArray jsonArrayRegistros = jsonObject.getJSONArray("registros");
+
+                // Iterar sobre cada registro en el array
+                for (int i = 0; i < jsonArrayRegistros.length(); i++) {
+                    // Obtener el objeto JSON del registro actual
+                    JSONObject registro = jsonArrayRegistros.getJSONObject(i);
+
+                    // Crear una instancia de PlanillaData y asignar los valores del JSON
+                    PlanillaDataModel planillaData = new PlanillaDataModel();
+                    planillaData.setUsuario(registro.optString("usuario"));
+                    planillaData.setLote(registro.optString("lote"));
+                    planillaData.setFinca(registro.optString("finca"));
+                    planillaData.setFechaHora(registro.optString("fechaHora"));
+
+                    // Crear un array JSON para los nombres de las plagas
+                    JSONArray jsonArrayPlagas = registro.optJSONArray("plagasSeleccionadas");
+                    List<String> nombresPlagas = new ArrayList<>();
+                    if (jsonArrayPlagas != null) {
+                        for (int j = 0; j < jsonArrayPlagas.length(); j++) {
+                            JSONObject plaga = jsonArrayPlagas.getJSONObject(j);
+                            nombresPlagas.add(plaga.optString("nombre"));
+                        }
+                    }
+                    planillaData.setPlagasSeleccionadas(nombresPlagas);
+
+                    // Subir los datos a Firestore
+                    db.collection("Planilla").document()
+                            .set(planillaData)
+                            .addOnSuccessListener(aVoid -> {
+                                // Éxito al subir los datos a Firestore
+                                Toast.makeText(Planilla.this, "Datos subidos correctamente", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                // Error al subir los datos a Firestore
+                                Toast.makeText(Planilla.this, "Error al subir datos " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+                }
+
+                // Una vez que se han subido todos los registros, puedes limpiar el JSON almacenado localmente si es necesario
+                limpiarJsonLocal();
+                finish();
+                Intent intent = new Intent(Planilla.this, Planilla.class);
+                startActivity(intent);
+
+            } else {
+                Toast.makeText(Planilla.this, "El JSON no contiene la clave 'registros'", Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(Planilla.this, "Error al parsear el JSON: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Método para limpiar el JSON almacenado localmente después de subir los datos a Firestore
+    private void limpiarJsonLocal() {
+        // Limpiar el JSON almacenado localmente
+        SharedPreferences sharedPreferences = getSharedPreferences("local_data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("json_data");
+        editor.apply();
+    }
 }
+
