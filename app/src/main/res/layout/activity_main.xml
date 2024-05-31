@@ -67,5 +67,17 @@
         android:layout_height="81dp"
         android:layout_marginTop="16dp"
         android:text="Cerrar Sesión" />
+
+    <EditText
+        android:id="@+id/rol"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="32dp"
+        android:background="@color/white"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/rolUser"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent" />
 </LinearLayout>
 

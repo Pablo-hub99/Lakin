@@ -32,6 +32,7 @@ android {
     }
 }
 
+
 dependencies {
 
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -41,6 +42,7 @@ dependencies {
     implementation ("com.firebaseui:firebase-ui-firestore:8.0.0")
     implementation ("com.google.firebase:firebase-storage:20.0.0")
     implementation ("com.google.firebase:firebase-auth:21.0.1")
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation ("com.squareup.picasso:picasso:2.8")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

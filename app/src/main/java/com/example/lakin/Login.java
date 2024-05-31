@@ -91,7 +91,7 @@ public class Login extends AppCompatActivity {
             String passUser = password.getText().toString().trim();
 
             // Verifica si el correo y contraseña están vacíos
-            if (emailUser.isEmpty() && passUser.isEmpty()){
+            if (emailUser.isEmpty() || passUser.isEmpty()){
                 // Muestra un mensaje si ambos campos están vacíos
                 Toast.makeText(Login.this, "Ingresar los datos", Toast.LENGTH_SHORT).show();
             } else {
@@ -111,7 +111,7 @@ public class Login extends AppCompatActivity {
                         // Obtiene el usuario actual
                         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                        if (currentUser != null) {
+                        if (currentUser != null ) {
                             // Obtiene el ID del usuario
                             String userId = currentUser.getUid();
 

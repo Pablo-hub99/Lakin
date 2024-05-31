@@ -47,34 +47,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.097" />
 
-        <Button
-            android:id="@+id/btnGuardarLocal"
-            android:layout_width="175dp"
-            android:layout_height="56dp"
-
-            android:backgroundTint="#AEE56F"
-            android:text="Subir Datos"
-            android:textColor="#000000"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.902"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/btnGuardarBd"
-            android:layout_width="175dp"
-            android:layout_height="56dp"
-
-            android:backgroundTint="#AEE56F"
-            android:text="Guardar local"
-            android:textColor="#000000"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.004"
-            app:layout_constraintStart_toStartOf="parent" />
-
         <ImageView
             android:id="@+id/btnAtrasgrafica"
             android:layout_width="63dp"
@@ -87,19 +59,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="390dp"
-            android:layout_height="258dp"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="100dp"
-            android:layout_marginBottom="171dp"
-            android:text="Seccion no terminado."
-            android:textSize="60sp"
-            app:layout_constraintBottom_toTopOf="@+id/btnGuardarLocal"
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/bar_chart"
+            android:layout_width="373dp"
+            android:layout_height="568dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinner" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

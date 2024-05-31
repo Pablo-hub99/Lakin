@@ -63,11 +63,9 @@ public class Planilla extends AppCompatActivity {
         // Obtener el nombre de usuario del Intent
         String userName = getIntent().getStringExtra("userName");
         String rol = getIntent().getStringExtra("userRole");
-
-        if(userName == null){
-            userName = name;
-            editTextLote.setText(lote);
-            editTextFinca.setText(finca);
+        if( getIntent().getStringExtra("userLote") != null){
+            editTextLote.setText(getIntent().getStringExtra("userLote"));
+            editTextFinca.setText(getIntent().getStringExtra("userFinca"));
         }
 
         // Mostrar el nombre de usuario en el EditText
@@ -214,9 +212,9 @@ public class Planilla extends AppCompatActivity {
     }
     // Método para guardar la información localmente en formato JSON
     private void guardarEnLocal() {
-         name = txtUserName.getText().toString();
-         lote = editTextLote.getText().toString().trim();
-         finca = editTextFinca.getText().toString().trim();
+        name = txtUserName.getText().toString();
+        lote = editTextLote.getText().toString().trim();
+        finca = editTextFinca.getText().toString().trim();
 
         // Verificar si los campos están completos
         if (lote.isEmpty() || finca.isEmpty()) {
@@ -288,10 +286,10 @@ public class Planilla extends AppCompatActivity {
             // Notificar al adaptador que los datos han cambiado
             finish();
             Intent intent = new Intent(Planilla.this, Planilla.class);
+            intent.putExtra("userName", name);
+            intent.putExtra("userLote", lote);
+            intent.putExtra("userFinca", finca);
             startActivity(intent);
-            txtUserName.setText(name);
-            editTextLote.setText(lote);
-            editTextFinca.setText(finca);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -389,6 +387,9 @@ public class Planilla extends AppCompatActivity {
                 limpiarJsonLocal();
                 finish();
                 Intent intent = new Intent(Planilla.this, Planilla.class);
+                intent.putExtra("userName", name);
+                intent.putExtra("userLote", lote);
+                intent.putExtra("userFinca", finca);
                 startActivity(intent);
 
             } else {
