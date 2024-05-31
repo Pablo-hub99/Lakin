@@ -127,6 +127,8 @@ public class Login extends AppCompatActivity {
 
                                             // Finaliza esta actividad y abre la MainActivity
                                             Intent intent = new Intent(Login.this, MainActivity.class);
+                                            Global.Name = currentUser.getDisplayName();
+                                            Global.Rol = userRole;
                                             intent.putExtra("userName", currentUser.getDisplayName());
                                             intent.putExtra("userRole", userRole); // Pasar el rol del usuario como extra
                                             startActivity(intent);

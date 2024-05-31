@@ -61,16 +61,15 @@ public class Planilla extends AppCompatActivity {
 
 
         // Obtener el nombre de usuario del Intent
-        String userName = getIntent().getStringExtra("userName");
-        String rol = getIntent().getStringExtra("userRole");
+
         if( getIntent().getStringExtra("userLote") != null){
             editTextLote.setText(getIntent().getStringExtra("userLote"));
             editTextFinca.setText(getIntent().getStringExtra("userFinca"));
         }
 
         // Mostrar el nombre de usuario en el EditText
-        if (userName != null) {
-            txtUserName.setText(userName);
+        if (Global.Name != null) {
+            txtUserName.setText(Global.Name);
             txtUserName.setFocusable(false);
             txtUserName.setClickable(false);
         }
@@ -93,7 +92,6 @@ public class Planilla extends AppCompatActivity {
         btnAtrasPlanilla = findViewById(R.id.btnAtrasPlanilla);
         btnAtrasPlanilla.setOnClickListener(v -> {
             Intent intent = new Intent(Planilla.this, MainActivity.class);
-            intent.putExtra("userRole", rol);
             startActivity(intent);
             finish();
         });
